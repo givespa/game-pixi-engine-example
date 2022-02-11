@@ -12,7 +12,8 @@ import {
 } from 'pixi-game-camera';
 
 
-let color = 'F04660';
+// let color = 'F04660';
+let color = 'Ffffff';
 
 const app = new PIXI.Application({
   width: 1920,
@@ -28,8 +29,8 @@ const camera = new Camera(options);
 // const mildShake = new Shake(app.stage, 3, 5000);
 // camera.effect(mildShake);
 
-const panToCenter = new PanTo(app.stage, 200, 250, 5000);
-camera.effect(panToCenter);
+// const panToCenter = new PanTo(app.stage, 200, 250, 5000);
+// camera.effect(panToCenter);
 
 // const fadeToBlack = new Fade(app.stage, new PIXI.Sprite(PIXI.Texture.WHITE), 0x000000, 1, 5000);
 // camera.effect(fadeToBlack);
@@ -37,15 +38,16 @@ camera.effect(panToCenter);
 // const rotate45Deg = new Rotate(app.stage, 45, 3000);
 // camera.effect(rotate45Deg);
 
-// const container = new PIXI.Container();
+
+const background = new PIXI.Container();
 const texture = PIXI.Texture.from('mickey.png');
 const sprite = new PIXI.Sprite(texture);
 
 
 sprite.x = app.screen.width / 2;
 sprite.y = app.screen.height / 2;
-app.stage.addChild(sprite);
-// container.addChild(sprite);
+app.stage.addChild(background);
+background.addChild(sprite);
 
 app.ticker.add((delta) => {
   // rotate the container!
@@ -69,13 +71,24 @@ function onAssetsLoaded(loader, res) {
     // create a spine boy
     const spineBoyPro = new Spine(res.spineboypro.spineData);
 
+    // const zoomIn = new ZoomTo(spineBoyPro, 2, 2, 5000);
+    // camera.effect(zoomIn);
+
     // set the position
     spineBoyPro.x = app.screen.width / 2;
-    spineBoyPro.y = app.screen.height;
+    // spineBoyPro.y = app.screen.height;
+    spineBoyPro.y = app.screen.height / 2;
+
+    app.ticker.add((delta) => {
+      // update the spine animation
+      // spineBoyPro.update(delta);
+      spineBoyPro.y += 9.8 * delta;
+    });
 
     spineBoyPro.scale.set(0.5);
 
-    app.stage.addChild(spineBoyPro);
+    // app.stage.addChild(spineBoyPro);
+    background.addChild(spineBoyPro);
 
     const singleAnimations = ['aim', 'death', 'jump', 'portal'];
     const loopAnimations = ['hoverboard', 'idle', 'run', 'shoot', 'walk'];
@@ -95,7 +108,6 @@ function onAssetsLoaded(loader, res) {
         lastAnimation = animation;
     });
 }
-
 
 function App() {
   const ref = useRef(null);
