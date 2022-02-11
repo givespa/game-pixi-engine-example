@@ -2,6 +2,16 @@ import React, { useRef, useEffect } from "react";
 import * as PIXI from "pixi.js";
 import {Spine} from 'pixi-spine';
 
+import {
+  Fade,
+  PanTo,
+  Shake,
+  Rotate,
+  ZoomTo,
+  Camera,
+} from 'pixi-game-camera';
+
+
 let color = 'F04660';
 
 const app = new PIXI.Application({
@@ -10,9 +20,27 @@ const app = new PIXI.Application({
   backgroundColor: `0x${color}`,
 });
 
+const options = {
+  ticker: app.ticker
+};
+
+const camera = new Camera(options);
+// const mildShake = new Shake(app.stage, 3, 5000);
+// camera.effect(mildShake);
+
+const panToCenter = new PanTo(app.stage, 200, 250, 5000);
+camera.effect(panToCenter);
+
+// const fadeToBlack = new Fade(app.stage, new PIXI.Sprite(PIXI.Texture.WHITE), 0x000000, 1, 5000);
+// camera.effect(fadeToBlack);
+
+// const rotate45Deg = new Rotate(app.stage, 45, 3000);
+// camera.effect(rotate45Deg);
+
 // const container = new PIXI.Container();
-// const texture = ;
-const sprite = new PIXI.Sprite(PIXI.Texture.from('mickey.png'));
+const texture = PIXI.Texture.from('mickey.png');
+const sprite = new PIXI.Sprite(texture);
+
 
 sprite.x = app.screen.width / 2;
 sprite.y = app.screen.height / 2;
@@ -23,11 +51,9 @@ app.ticker.add((delta) => {
   // rotate the container!
   // use delta to create frame-independent transform
 
-  // console.log(delta);
-
-  // color = (parseInt(color, 16) + 10).toString(16);
+  // color = (parseInt(color, 16) + 1).toString(16);
   // app.renderer.backgroundColor = `0x${color}`;
-  console.log(color);
+
 });
 
 // const app = new PIXI.Application();
@@ -70,9 +96,6 @@ function onAssetsLoaded(loader, res) {
     });
 }
 
-
-const styles = {
-  position: 'absolute', height: '775px', width: '1397px', cursor: 'inherit'}
 
 function App() {
   const ref = useRef(null);
